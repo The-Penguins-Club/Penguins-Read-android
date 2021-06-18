@@ -2,6 +2,6 @@ package club.thepenguins.android.utils;
 
 public interface Constants {
 
-    String BaseUrl = "";
+    String BaseUrl = "https://thepenguins.club/";
 
 }

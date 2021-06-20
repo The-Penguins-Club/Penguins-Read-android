@@ -135,7 +135,7 @@ public class HomeFragment extends Fragment {
                 mListPost = response.body();
                 for (int i = 0; i < response.body().size(); i++) {
 
-                    list.add(new Model(response.body().get(i).getTitle().getRendered(), response.body().get(i).getContent().getRendered(), response.body().get(i).getEmbedded().getWpFeaturedmedia().get(0).getSourceUrl(), response.body().get(i).getContent().getRendered()));
+                    list.add(new Model(response.body().get(i).getTitle().getRendered(), response.body().get(i).getContent().getRendered(), response.body().get(i).getEmbedded().getWpFeaturedmedia().get(0).getSourceUrl(), response.body().get(i).getContent().getRendered(), response.body().get(i).getEmbedded().getAuthor().get(0).getName()));
 
                     Log.d("Home", "onResponse: " + response.body().get(i).getEmbedded().getWpFeaturedmedia().get(0).getSourceUrl());
                 }

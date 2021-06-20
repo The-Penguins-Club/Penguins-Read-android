@@ -51,6 +51,7 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
 
         holder.title.setText(object.title);
         holder.subtitle.setText(Html.fromHtml(object.subtitle));
+        holder.author.setText(object.author);
 
         Picasso.get()
                 .load(object.Image)
@@ -124,7 +125,7 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
     public class ViewHolder extends RecyclerView.ViewHolder {
 
 
-        TextView title, subtitle;
+        TextView title, subtitle, author;
         ImageView imageView;
         CardView cardView;
 
@@ -136,6 +137,7 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
             title = itemView.findViewById(R.id.title);
             subtitle = itemView.findViewById(R.id.subtitle);
             imageView = itemView.findViewById(R.id.Icon);
+            author = itemView.findViewById(R.id.author);
         }
     }
 

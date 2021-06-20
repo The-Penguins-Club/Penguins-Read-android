@@ -8,9 +8,11 @@
         <menu>
             <group>
                 <item
-
+                    android:id="@+id/linuxfrag"
                     android:title="Linux" />
-                <item android:title="Nix" />
+                <item
+                    android:id="@+id/nixfrag"
+                    android:title="Nix" />
                 <item android:title="News" />
                 <item android:title="Hardware" />
                 <item android:title="Technology" />

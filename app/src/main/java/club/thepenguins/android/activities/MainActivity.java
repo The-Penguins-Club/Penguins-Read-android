@@ -20,6 +20,8 @@ import club.thepenguins.android.R;
 
 import club.thepenguins.android.fragments.AboutFragment;
 import club.thepenguins.android.fragments.HomeFragment;
+import club.thepenguins.android.fragments.LinuxFragment;
+import club.thepenguins.android.fragments.NixFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -154,15 +156,20 @@ public class MainActivity extends AppCompatActivity {
 
                 break;
 
-            //case R.id.nav_third_fragment:
+            case R.id.linuxfrag:
 
-            // fragmentClass = ThirdFragment.class;
+                fragmentClass = LinuxFragment.class;
 
-            // break;
+                break;
+            case R.id.nixfrag:
+
+                fragmentClass = NixFragment.class;
+
+                break;
 
             default:
 
-                // fragmentClass = FirstFragment.class;
+                 fragmentClass = HomeFragment.class;
 
         }
 

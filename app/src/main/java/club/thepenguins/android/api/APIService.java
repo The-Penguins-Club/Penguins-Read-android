@@ -6,6 +6,7 @@ import club.thepenguins.android.data.Image;
 import club.thepenguins.android.data.Posts;
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Query;
 
 public interface APIService {
 
@@ -14,5 +15,8 @@ public interface APIService {
 
     @GET(".")
     Call<Image> getFeaturedImageLink();
+
+    @GET("wp-json/wp/v2/posts?_embed")
+    Call<List<Posts>> getCategoryPosts(@Query("categories") String id);
 
 }

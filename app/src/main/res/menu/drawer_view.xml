@@ -1,0 +1,30 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group>
+        <item
+            android:id="@+id/nav_first_fragment"
+            android:title="Home" />
+    </group>
+    <item android:title="Categories">
+        <menu>
+            <group>
+                <item
+
+                    android:title="Linux" />
+                <item android:title="Nix" />
+                <item android:title="News" />
+                <item android:title="Hardware" />
+                <item android:title="Technology" />
+            </group>
+        </menu>
+    </item>
+    <item android:title="Sub items">
+        <menu>
+            <group>
+                <item
+                    android:id="@+id/aboutfrag"
+                    android:title="About Us" />
+                <item android:title="Sub item 2" />
+            </group>
+        </menu>
+    </item>
+</menu>

@@ -3,7 +3,7 @@ package club.thepenguins.android.data;
 public class Model {
     public String title, subtitle, Image, Content;
 
-    public Model ( String mtitle, String msubtitle, String image){
+    public Model(String mtitle, String msubtitle, String image) {
 
         this.title = mtitle;
         this.subtitle = msubtitle;

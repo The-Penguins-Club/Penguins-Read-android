@@ -1,99 +1,192 @@
 package club.thepenguins.android.activities;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.ProgressBar;
+import android.view.MenuItem;
 
-import java.util.ArrayList;
-import java.util.List;
+
+import com.google.android.material.navigation.NavigationView;
+
 
 import club.thepenguins.android.R;
-import club.thepenguins.android.adapters.PostRecyclerAdapter;
-import club.thepenguins.android.api.APIService;
-import club.thepenguins.android.data.Model;
-import club.thepenguins.android.data.Posts;
-import club.thepenguins.android.utils.Constants;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+
+import club.thepenguins.android.fragments.AboutFragment;
+import club.thepenguins.android.fragments.HomeFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = "MainAc";
-    private RecyclerView recyclerView;
-    private ProgressBar progressBar;
-    private LinearLayoutManager LayoutManager;
-    private ArrayList<Model> list;
-    private PostRecyclerAdapter adapter;
-    public static List<Posts> mListPost;
+
+    private DrawerLayout mDrawer;
+    private Toolbar toolbar;
+
+    private NavigationView nvDrawer;
+    private ActionBarDrawerToggle drawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        recyclerView = findViewById(R.id.recycler_view);
-        progressBar = findViewById(R.id.progressbar);
 
-        LayoutManager = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(LayoutManager);
+        toolbar = findViewById(R.id.toolbar);
 
-        list = new ArrayList<>();
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        getRetrofit();
 
-        adapter = new PostRecyclerAdapter(list, MainActivity.this);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        recyclerView.setAdapter(adapter);
+        mDrawer = findViewById(R.id.drawer_layout);
+
+        nvDrawer = findViewById(R.id.nvView);
+
+        setupDrawerContent(nvDrawer);
+
+
+        mDrawer = findViewById(R.id.drawer_layout);
+
+        drawerToggle = setupDrawerToggle();
+
+        drawerToggle.setDrawerIndicatorEnabled(true);
+
+        drawerToggle.syncState();
+
+        mDrawer.addDrawerListener(drawerToggle);
+
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        fragmentManager.beginTransaction().replace(R.id.flContent, HomeFragment.newInstance("null", "null")).commit();
+
     }
 
-    private void getRetrofit() {
+    @Override
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Constants.BaseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+    protected void onPostCreate(Bundle savedInstanceState) {
 
-        APIService service = retrofit.create(APIService.class);
-        Call<List<Posts>> call = service.getPosts();
+        super.onPostCreate(savedInstanceState);
 
+        drawerToggle.syncState();
 
-        call.enqueue(new Callback<List<Posts>>() {
-            @Override
-            public void onResponse(Call<List<Posts>> call, Response<List<Posts>> response) {
-
-                //Log.d(TAG, "onResponse: " + response.body().get();
+    }
 
 
-                mListPost = response.body();
-                progressBar.setVisibility(View.GONE);
-                for (int i = 0; i < response.body().size(); i++) {
+    @Override
 
-                    // getFeaturedImage();
+    public void onConfigurationChanged(Configuration newConfig) {
 
-                    // getFeaturedImage(response.body().get(i).getLinks().getWpFeaturedmedia().get(0).getHref());
+        super.onConfigurationChanged(newConfig);
 
-                    list.add(new Model(response.body().get(i).getTitle().getRendered(), response.body().get(i).getContent().getRendered(), response.body().get(i).getEmbedded().getWpFeaturedmedia().get(0).getSourceUrl(), response.body().get(i).getContent().getRendered()));
+        drawerToggle.onConfigurationChanged(newConfig);
 
-                    Log.d(TAG, "onResponse: " + response.body().get(i).getEmbedded().getWpFeaturedmedia().get(0).getSourceUrl());
-                }
-                adapter.notifyDataSetChanged();
+    }
 
-            }
+    private ActionBarDrawerToggle setupDrawerToggle() {
 
-            @Override
-            public void onFailure(Call<List<Posts>> call, Throwable t) {
+        return new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open, R.string.drawer_close);
 
-                Log.d(TAG, "onFailure: ", t);
-            }
-        });
+    }
+
+    @Override
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+
+                mDrawer.openDrawer(GravityCompat.START);
+
+                return true;
+
+        }
+
+        return super.onOptionsItemSelected(item);
+
+    }
+
+    private void setupDrawerContent(NavigationView navigationView) {
+
+        navigationView.setNavigationItemSelectedListener(
+
+                new NavigationView.OnNavigationItemSelectedListener() {
+
+                    @Override
+
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+
+                        selectDrawerItem(menuItem);
+
+                        return true;
+
+                    }
+
+                });
+
+    }
+
+
+    public void selectDrawerItem(MenuItem menuItem) {
+
+        Fragment fragment = null;
+
+        Class fragmentClass = null;
+
+        switch (menuItem.getItemId()) {
+
+            case R.id.nav_first_fragment:
+
+                fragmentClass = HomeFragment.class;
+
+                break;
+
+            case R.id.aboutfrag:
+
+                fragmentClass = AboutFragment.class;
+
+                break;
+
+            //case R.id.nav_third_fragment:
+
+            // fragmentClass = ThirdFragment.class;
+
+            // break;
+
+            default:
+
+                // fragmentClass = FirstFragment.class;
+
+        }
+
+
+        try {
+
+            fragment = (Fragment) fragmentClass.newInstance();
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+        }
+
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+
+        menuItem.setChecked(true);
+
+        setTitle(menuItem.getTitle());
+        mDrawer.closeDrawers();
+
     }
 
 

@@ -8,6 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -16,23 +22,30 @@ import org.jsoup.select.Elements;
 
 import club.thepenguins.android.R;
 
+
 public class PostFragment extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_PARAM3 = "param3";
+    private static final String ARG_PARAM4 = "param4";
     private String mParam1;
     private String mParam2;
+    private String mParam3;
+    private String mParam4;
 
     public PostFragment() {
         // Required empty public constructor
     }
 
 
-    public static PostFragment newInstance(String param1, String param2) {
+    public static PostFragment newInstance(String param1, String param2, String param3, String param4) {
         PostFragment fragment = new PostFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_PARAM3, param3);
+        args.putString(ARG_PARAM4, param4);
         fragment.setArguments(args);
         return fragment;
     }
@@ -43,6 +56,8 @@ public class PostFragment extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+            mParam3 = getArguments().getString(ARG_PARAM3);
+            mParam4 = getArguments().getString(ARG_PARAM4);
         }
     }
 
@@ -53,8 +68,12 @@ public class PostFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_post, container, false);
 
 
-        /*
-        ImageView imageView = rootView.findViewById(R.id.postImage);
+        ImageView imageView = rootView.findViewById(R.id.postImg);
+        TextView textView = rootView.findViewById(R.id.author);
+        TextView textView2 = rootView.findViewById(R.id.postTitle);
+        textView2.setText(mParam3);
+        textView.setText(mParam4);
+
 
         Picasso.get()
                 .load(mParam2)
@@ -79,7 +98,6 @@ public class PostFragment extends Fragment {
                     }
                 });
 
-         */
 
         Document doc = Jsoup.parse(mParam1);
 

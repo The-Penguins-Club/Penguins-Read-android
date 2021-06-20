@@ -93,7 +93,7 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
 
                 FragmentManager fragmentManager = ((AppCompatActivity) ctx).getSupportFragmentManager();
 
-                fragmentManager.beginTransaction().replace(R.id.flContent, PostFragment.newInstance(object.Content, object.Image)).addToBackStack("DetailedPizza").commit();
+                fragmentManager.beginTransaction().replace(R.id.flContent, PostFragment.newInstance(object.Content, object.Image, object.title, object.author)).addToBackStack("DetailedPizza").commit();
 
             }
         });

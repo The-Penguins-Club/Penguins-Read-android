@@ -4,11 +4,14 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Callback;
@@ -20,7 +23,16 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.util.ArrayList;
+
 import club.thepenguins.android.R;
+import club.thepenguins.android.api.APIService;
+import club.thepenguins.android.data.IndividualPost;
+import club.thepenguins.android.data.PostContent;
+import retrofit2.Call;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class PostFragment extends Fragment {
@@ -33,6 +45,8 @@ public class PostFragment extends Fragment {
     private String mParam2;
     private String mParam3;
     private String mParam4;
+    private ArrayList<PostContent> postData;
+    private ProgressBar progressBar;
 
     public PostFragment() {
         // Required empty public constructor
@@ -73,6 +87,7 @@ public class PostFragment extends Fragment {
         TextView textView2 = rootView.findViewById(R.id.postTitle);
         textView2.setText(mParam3);
         textView.setText(mParam4);
+        progressBar = rootView.findViewById(R.id.progress);
 
 
         Picasso.get()
@@ -98,37 +113,87 @@ public class PostFragment extends Fragment {
                     }
                 });
 
+        postData = new ArrayList<>();
+        postData.clear();
 
-        Document doc = Jsoup.parse(mParam1);
+        getRetrofit(mParam1);
+        Log.d("TAG", "onCreateView: " + mParam1);
 
-        Elements images = doc.select("img");
-        Elements iframes = doc.select("iframe");
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
 
-        for (Element image : images) {
+                Document doc = Jsoup.parse(postData.get(0).getContent());
 
-            image.attr("width", "100%");
-            image.attr("height", "240px");
+                Elements images = doc.select("img");
+                Elements iframes = doc.select("iframe");
 
-        }
+                for (Element image : images) {
 
-        for (Element iframe : iframes) {
+                    image.attr("width", "100%");
+                    image.attr("height", "240px");
 
-            if (iframe.attr("width").isEmpty()) {
-                iframe.attr("width", "100%");
+                }
+
+                for (Element iframe : iframes) {
+
+                    if (iframe.attr("width").isEmpty()) {
+                        iframe.attr("width", "100%");
+                    }
+
+                }
+
+                String htmlString = doc.html();
+
+
+                WebView myWebView = rootView.findViewById(R.id.webview);
+
+                myWebView.loadDataWithBaseURL(null, htmlString, "text/html", "UTF-8", null);
+                myWebView.getSettings().getJavaScriptEnabled();
+                progressBar.setVisibility(View.GONE);
             }
-
-        }
-
-        String htmlString = doc.html();
-
-
-        WebView myWebView = rootView.findViewById(R.id.webview);
-
-        myWebView.loadDataWithBaseURL(null, htmlString, "text/html", "UTF-8", null);
-        myWebView.getSettings().getJavaScriptEnabled();
+        }, 2000);
 
 
         return rootView;
+    }
+
+    private void getRetrofit(String postUrl) {
+
+        progressBar.setVisibility(View.VISIBLE);
+
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(postUrl + "/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        APIService service = retrofit.create(APIService.class);
+        Call<IndividualPost> call = service.getPostContent();
+
+
+        call.enqueue(new retrofit2.Callback<IndividualPost>() {
+            @Override
+            public void onResponse(Call<IndividualPost> call, Response<IndividualPost> response) {
+
+
+                if (postData.size() > 1) {
+                    postData.clear();
+                }
+
+
+                postData.add(new PostContent(response.body().getContent().getRendered()));
+
+
+            }
+
+            @Override
+            public void onFailure(Call<IndividualPost> call, Throwable t) {
+
+                Log.d("PostRecyclerAdapter", "onFailure: ", t);
+            }
+        });
     }
 
 

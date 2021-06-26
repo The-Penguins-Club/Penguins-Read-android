@@ -22,6 +22,7 @@ import com.squareup.picasso.Picasso;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
@@ -86,7 +87,7 @@ public class PostFragment extends Fragment {
         ImageView imageView = rootView.findViewById(R.id.postImg);
         TextView textView = rootView.findViewById(R.id.author);
         TextView textView2 = rootView.findViewById(R.id.postTitle);
-        textView2.setText(mParam3);
+        textView2.setText(Parser.unescapeEntities(mParam3, false));
         textView.setText(mParam4);
         progressBar = rootView.findViewById(R.id.progress);
 

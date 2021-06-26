@@ -2,7 +2,9 @@ package club.thepenguins.android.fragments;
 
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.os.Handler;
 import android.util.Log;
@@ -89,6 +91,17 @@ public class PostFragment extends Fragment {
         textView.setText(mParam4);
         progressBar = rootView.findViewById(R.id.progress);
 
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace( ((ViewGroup)getView().getParent()).getId(), AuthorPostFragment.newInstance(mParam4, null), "findThisFragment")
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
+
 
         Picasso.get()
                 .load(mParam2)
@@ -153,7 +166,7 @@ public class PostFragment extends Fragment {
                 myWebView.getSettings().getJavaScriptEnabled();
                 progressBar.setVisibility(View.GONE);
             }
-        }, 2000);
+        }, 3000);
 
 
         return rootView;

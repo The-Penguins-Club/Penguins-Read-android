@@ -28,7 +28,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
-public class HomeFragment extends Fragment {
+public class AuthorPostFragment extends Fragment {
 
 
     private static final String ARG_PARAM1 = "param1";
@@ -43,8 +43,8 @@ public class HomeFragment extends Fragment {
     private SwipeRefreshLayout swipeContainer;
 
 
-    public static HomeFragment newInstance(String param1, String param2) {
-        HomeFragment fragment = new HomeFragment();
+    public static AuthorPostFragment newInstance(String param1, String param2) {
+        AuthorPostFragment fragment = new AuthorPostFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -52,7 +52,7 @@ public class HomeFragment extends Fragment {
         return fragment;
     }
 
-    public HomeFragment() {
+    public AuthorPostFragment() {
         // Required empty public constructor
     }
 
@@ -70,21 +70,21 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
 
 
-        View rootView = inflater.inflate(R.layout.fragment_home, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_author_post, container, false);
 
         getActivity().setTitle("Choose Fragment");
 
 
-        recyclerView = rootView.findViewById(R.id.recycler_view);
+        recyclerView = rootView.findViewById(R.id.recycler_view_author);
 
         LayoutManager = new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(LayoutManager);
 
-        swipeContainer = rootView.findViewById(R.id.swiperefresh);
+        swipeContainer = rootView.findViewById(R.id.swiperefreshauthor);
 
         list = new ArrayList<>();
 
-        getRetrofit("100");
+        getRetrofit(mParam1);
 
 
         adapter = new PostRecyclerAdapter(list, rootView.getContext());
@@ -98,7 +98,7 @@ public class HomeFragment extends Fragment {
             public void onRefresh() {
 
                 adapter.clear();
-                getRetrofit("100");
+                getRetrofit(mParam1);
             }
 
         });
@@ -115,7 +115,7 @@ public class HomeFragment extends Fragment {
         return rootView;
     }
 
-    private void getRetrofit(String perpage) {
+    private void getRetrofit(String authorId) {
 
         swipeContainer.setRefreshing(true);
 
@@ -125,18 +125,18 @@ public class HomeFragment extends Fragment {
                 .build();
 
         APIService service = retrofit.create(APIService.class);
-        Call<List<Posts>> call = service.getPostsPerPage(perpage);
+        Call<List<Posts>> call = service.getAuthorPosts(authorId);
 
 
         call.enqueue(new Callback<List<Posts>>() {
             @Override
             public void onResponse(Call<List<Posts>> call, Response<List<Posts>> response) {
 
-                mListPost = response.body();
+              //  mListPost = response.body();
                 for (int i = 0; i < response.body().size(); i++) {
 
-                    list.add(new Model(response.body().get(i).getTitle().getRendered().replace("&#8211;","-"), response.body().get(i).getContent().getRendered(), response.body().get(i).getEmbedded().getWpFeaturedmedia().get(0).getSourceUrl(), response.body().get(i).getLinks().getSelf().get(0).getHref(), response.body().get(i).getEmbedded().getAuthor().get(0).getName()));
-
+                    list.add(new Model(response.body().get(i).getTitle().getRendered(), response.body().get(i).getContent().getRendered(), response.body().get(i).getEmbedded().getWpFeaturedmedia().get(0).getSourceUrl(), response.body().get(i).getLinks().getSelf().get(0).getHref(), response.body().get(i).getEmbedded().getAuthor().get(0).getName()));
+                    //Log.d("Home", "onResponse: " + response.body().get(i).getEmbedded().getWpFeaturedmedia().get(0).getSourceUrl());
                 }
                 adapter.notifyDataSetChanged();
                 swipeContainer.setRefreshing(false);

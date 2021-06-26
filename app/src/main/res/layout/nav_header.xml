@@ -4,7 +4,7 @@
 
     android:layout_height="192dp"
 
-    android:background="?attr/colorPrimaryDark"
+    android:background="@color/white"
 
     android:gravity="bottom"
 
@@ -25,7 +25,7 @@
         android:text="The Penguins Club"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
 
-        android:textColor="@android:color/white"
+        android:textColor="@android:color/black"
 
         android:textSize="30sp" />
 

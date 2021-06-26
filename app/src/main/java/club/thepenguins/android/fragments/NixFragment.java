@@ -83,49 +83,49 @@ public class NixFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_linux, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_linux, container, false);
 
-            getActivity().setTitle("Choose Fragment");
-
-
-            recyclerView = rootView.findViewById(R.id.recycler_view);
-
-            LayoutManager = new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false);
-            recyclerView.setLayoutManager(LayoutManager);
-
-            swipeContainer = rootView.findViewById(R.id.swiperefresh);
-
-            list = new ArrayList<>();
-
-            getRetrofit();
+        getActivity().setTitle("Choose Fragment");
 
 
-            adapter = new PostRecyclerAdapter(list, rootView.getContext());
+        recyclerView = rootView.findViewById(R.id.recycler_view);
 
-            recyclerView.setAdapter(adapter);
+        LayoutManager = new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(LayoutManager);
 
-            swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swipeContainer = rootView.findViewById(R.id.swiperefresh);
 
-                @Override
+        list = new ArrayList<>();
 
-                public void onRefresh() {
-
-                    adapter.clear();
-                    getRetrofit();
-                }
-
-            });
+        getRetrofit();
 
 
-            swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+        adapter = new PostRecyclerAdapter(list, rootView.getContext());
 
-                    android.R.color.holo_green_light,
+        recyclerView.setAdapter(adapter);
 
-                    android.R.color.holo_orange_light,
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
-                    android.R.color.holo_red_light);
+            @Override
 
-            return rootView;
+            public void onRefresh() {
+
+                adapter.clear();
+                getRetrofit();
+            }
+
+        });
+
+
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+
+                android.R.color.holo_green_light,
+
+                android.R.color.holo_orange_light,
+
+                android.R.color.holo_red_light);
+
+        return rootView;
     }
 
     private void getRetrofit() {
@@ -148,7 +148,7 @@ public class NixFragment extends Fragment {
                 mListPost = response.body();
                 for (int i = 0; i < response.body().size(); i++) {
 
-                    list.add(new Model(response.body().get(i).getTitle().getRendered(), response.body().get(i).getContent().getRendered(), response.body().get(i).getEmbedded().getWpFeaturedmedia().get(0).getSourceUrl(), response.body().get(i).getContent().getRendered(),response.body().get(i).getEmbedded().getAuthor().get(0).getName()));
+                    list.add(new Model(response.body().get(i).getTitle().getRendered().replace("&#8211;", "-"), response.body().get(i).getContent().getRendered(), response.body().get(i).getEmbedded().getWpFeaturedmedia().get(0).getSourceUrl(), response.body().get(i).getLinks().getSelf().get(0).getHref(), response.body().get(i).getEmbedded().getAuthor().get(0).getName()));
 
                     //Log.d("Linux", "onResponse: " + response.body().get(i).getEmbedded().getWpFeaturedmedia().get(0).getSourceUrl());
                 }

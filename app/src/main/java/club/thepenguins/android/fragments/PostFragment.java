@@ -2,9 +2,7 @@ package club.thepenguins.android.fragments;
 
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import android.os.Handler;
 import android.util.Log;
@@ -15,6 +13,7 @@ import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
@@ -96,7 +95,7 @@ public class PostFragment extends Fragment {
             public void onClick(View view) {
 
                 getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace( ((ViewGroup)getView().getParent()).getId(), AuthorPostFragment.newInstance(mParam4, null), "findThisFragment")
+                        .replace(((ViewGroup) getView().getParent()).getId(), AuthorPostFragment.newInstance(mParam4, null), "findThisFragment")
                         .addToBackStack(null)
                         .commit();
             }
@@ -137,34 +136,41 @@ public class PostFragment extends Fragment {
             @Override
             public void run() {
 
-                Document doc = Jsoup.parse(postData.get(0).getContent());
+                try {
+                    Document doc = Jsoup.parse(postData.get(0).getContent());
 
-                Elements images = doc.select("img");
-                Elements iframes = doc.select("iframe");
+                    Elements images = doc.select("img");
+                    Elements iframes = doc.select("iframe");
 
-                for (Element image : images) {
+                    for (Element image : images) {
 
-                    image.attr("width", "100%");
-                    image.attr("height", "240px");
+                        image.attr("width", "100%");
+                        image.attr("height", "240px");
 
-                }
-
-                for (Element iframe : iframes) {
-
-                    if (iframe.attr("width").isEmpty()) {
-                        iframe.attr("width", "100%");
                     }
 
+                    for (Element iframe : iframes) {
+
+                        if (iframe.attr("width").isEmpty()) {
+                            iframe.attr("width", "100%");
+                        }
+
+                    }
+
+                    String htmlString = doc.html();
+
+
+                    WebView myWebView = rootView.findViewById(R.id.webview);
+
+                    myWebView.loadDataWithBaseURL(null, htmlString, "text/html", "UTF-8", null);
+                    myWebView.getSettings().getJavaScriptEnabled();
+                    progressBar.setVisibility(View.GONE);
+                } catch (Exception e) {
+                    Toast.makeText(rootView.getContext(), "Please retry", Toast.LENGTH_SHORT).show();
+                    Log.d("PostFragment", "run: " + e);
                 }
 
-                String htmlString = doc.html();
 
-
-                WebView myWebView = rootView.findViewById(R.id.webview);
-
-                myWebView.loadDataWithBaseURL(null, htmlString, "text/html", "UTF-8", null);
-                myWebView.getSettings().getJavaScriptEnabled();
-                progressBar.setVisibility(View.GONE);
             }
         }, 3000);
 

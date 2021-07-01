@@ -164,7 +164,7 @@ public class PostFragment extends Fragment {
                     WebView myWebView = rootView.findViewById(R.id.webview);
 
                     myWebView.loadDataWithBaseURL(null, htmlString, "text/html", "UTF-8", null);
-                    myWebView.getSettings().getJavaScriptEnabled();
+                    myWebView.getSettings().setJavaScriptEnabled(true);
                     progressBar.setVisibility(View.GONE);
                 } catch (Exception e) {
                     Toast.makeText(rootView.getContext(), "Please retry", Toast.LENGTH_SHORT).show();

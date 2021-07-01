@@ -90,8 +90,9 @@ public class HomeFragment extends Fragment {
 
 
         adapter = new PostRecyclerAdapter(list, rootView.getContext());
-
+        adapter.setStateRestorationPolicy(RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY);
         recyclerView.setAdapter(adapter);
+
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 

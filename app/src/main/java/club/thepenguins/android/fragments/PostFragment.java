@@ -10,19 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.NetworkPolicy;
-import com.squareup.picasso.Picasso;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
@@ -84,47 +78,7 @@ public class PostFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_post, container, false);
 
 
-        ImageView imageView = rootView.findViewById(R.id.postImg);
-        TextView textView = rootView.findViewById(R.id.author);
-        TextView textView2 = rootView.findViewById(R.id.postTitle);
-        textView2.setText(Parser.unescapeEntities(mParam3, false));
-        textView.setText(mParam4);
         progressBar = rootView.findViewById(R.id.progress);
-
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(((ViewGroup) getView().getParent()).getId(), AuthorPostFragment.newInstance(mParam4, null), "findThisFragment")
-                        .addToBackStack(null)
-                        .commit();
-            }
-        });
-
-
-        Picasso.get()
-                .load(mParam2)
-                .placeholder(R.color.preloadColor)
-                .fit()
-                .centerCrop()
-                .networkPolicy(NetworkPolicy.OFFLINE)
-                .into(imageView, new Callback() {
-                    @Override
-                    public void onSuccess() {
-
-                    }
-
-                    @Override
-                    public void onError(Exception e) {
-                        Picasso.get()
-                                .load(mParam2)
-                                .placeholder(R.color.preloadColor)
-                                .fit()
-                                .centerCrop()
-                                .into(imageView);
-                    }
-                });
 
         postData = new ArrayList<>();
         postData.clear();
@@ -138,7 +92,8 @@ public class PostFragment extends Fragment {
             public void run() {
 
                 try {
-                    Document doc = Jsoup.parse(postData.get(0).getContent());
+                    Document doc = Jsoup.parseBodyFragment(postData.get(0).getContent());
+                    doc.outputSettings().prettyPrint(false);
 
                     Elements images = doc.select("img");
                     Elements iframes = doc.select("iframe");
@@ -158,12 +113,22 @@ public class PostFragment extends Fragment {
 
                     }
 
-                    String htmlString = doc.html();
+                    String htmlString = doc.select("body").html();
+
+                    char quotes = '"';
+
+                    String postTitle = "<h2>" + mParam3 + "</h2>" + "\n";
+
+                    String postAuthor = "<p>" + "Author: " + mParam4 + "</p>" + "\n";
+
+                    String postImage = "<img src= " + quotes + mParam2 + quotes + " width =" + quotes + "100%" + quotes + "/>" + "\n";
+
+                    String newHtmlString = postImage + postTitle + postAuthor + htmlString;
 
 
                     WebView myWebView = rootView.findViewById(R.id.webview);
 
-                    myWebView.loadDataWithBaseURL(null, htmlString, "text/html", "UTF-8", null);
+                    myWebView.loadDataWithBaseURL(null, newHtmlString, "text/html", "UTF-8", null);
                     myWebView.getSettings().setJavaScriptEnabled(true);
                     progressBar.setVisibility(View.GONE);
                 } catch (Exception e) {

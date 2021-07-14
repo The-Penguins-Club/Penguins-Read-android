@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 import org.jsoup.parser.Parser;
 
@@ -43,6 +44,7 @@ public class HomeFragment extends Fragment {
     private PostRecyclerAdapter adapter;
     public static List<Posts> mListPost;
     private SwipeRefreshLayout swipeContainer;
+    private ShimmerFrameLayout loader;
 
 
     public static HomeFragment newInstance(String param1, String param2) {
@@ -82,6 +84,9 @@ public class HomeFragment extends Fragment {
         LayoutManager = new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(LayoutManager);
 
+
+        loader = (ShimmerFrameLayout) rootView.findViewById(R.id.shimmer_view_container);
+
         swipeContainer = rootView.findViewById(R.id.swiperefresh);
 
         list = new ArrayList<>();
@@ -115,12 +120,27 @@ public class HomeFragment extends Fragment {
 
                 android.R.color.holo_red_light);
 
+
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        //loader.startShimmer();
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        //loader.stopShimmer();
+        super.onPause();
     }
 
     private void getRetrofit(String perpage) {
 
         swipeContainer.setRefreshing(true);
+        loader.setVisibility(View.VISIBLE);
+        loader.startShimmer();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Constants.BaseUrl)
@@ -143,6 +163,8 @@ public class HomeFragment extends Fragment {
                 }
                 adapter.notifyDataSetChanged();
                 swipeContainer.setRefreshing(false);
+                loader.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
 
             }
 

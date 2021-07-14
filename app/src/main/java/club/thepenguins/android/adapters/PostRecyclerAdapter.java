@@ -55,7 +55,7 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
 
         Picasso.get()
                 .load(object.Image)
-                .placeholder(R.color.preloadColor)
+                .placeholder(R.color.shimmer_placeholder)
                 .fit()
                 .centerCrop()
                 .networkPolicy(NetworkPolicy.OFFLINE)
@@ -69,7 +69,7 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
                     public void onError(Exception e) {
                         Picasso.get()
                                 .load(object.Image)
-                                .placeholder(R.color.preloadColor)
+                                .placeholder(R.color.shimmer_placeholder)
                                 .fit()
                                 .centerCrop()
                                 .into(holder.imageView);
@@ -93,7 +93,7 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
 
                 FragmentManager fragmentManager = ((AppCompatActivity) ctx).getSupportFragmentManager();
 
-                fragmentManager.beginTransaction().replace(R.id.flContent, PostFragment.newInstance(object.Content, object.Image, object.title, object.author)).addToBackStack("DetailedPizza").commit();
+                fragmentManager.beginTransaction().replace(R.id.flContent, PostFragment.newInstance(object.Content, object.Image, object.title, object.author)).addToBackStack(null).commit();
 
             }
         });

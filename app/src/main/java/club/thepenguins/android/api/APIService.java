@@ -2,6 +2,7 @@ package club.thepenguins.android.api;
 
 import java.util.List;
 
+import club.thepenguins.android.data.Comments;
 import club.thepenguins.android.data.Image;
 import club.thepenguins.android.data.IndividualPost;
 import club.thepenguins.android.data.Posts;
@@ -28,5 +29,8 @@ public interface APIService {
 
     @GET("wp-json/wp/v2/posts?_embed")
     Call<List<Posts>> getAuthorPosts(@Query("author") String id);
+
+    @GET("wp-json/wp/v2/comments")
+    Call<List<Comments>> getPostComments(@Query("post") String id);
 
 }

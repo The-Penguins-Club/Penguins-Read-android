@@ -11,21 +11,19 @@
     android:layout_height="match_parent">
 
 
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
 
-        <include
-            layout="@layout/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            <include
+                layout="@layout/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </androidx.cardview.widget.CardView>
 
         <FrameLayout
@@ -35,7 +33,6 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 
-
     </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView
@@ -43,9 +40,9 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@android:color/white"
-        app:menu="@menu/drawer_view"
-        app:headerLayout="@layout/nav_header"/>
+        android:background="@color/backgroundColor"
+        app:headerLayout="@layout/nav_header"
+        app:menu="@menu/drawer_view" />
 
 
 </androidx.drawerlayout.widget.DrawerLayout>

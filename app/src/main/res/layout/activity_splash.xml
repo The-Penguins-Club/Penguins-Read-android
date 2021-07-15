@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/backgroundColor"
     tools:context=".activities.SplashActivity">
 
     <LinearLayout
@@ -22,7 +23,7 @@
             android:fontFamily="@font/unifrakturcook"
             android:gravity="center"
             android:text="P"
-            android:textColor="@color/black"
+            android:textColor="@color/textColor"
             android:textSize="128sp"
             android:textStyle="bold" />
 

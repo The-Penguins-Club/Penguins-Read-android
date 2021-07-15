@@ -10,7 +10,7 @@
 
     android:layout_height="wrap_content"
 
-    android:background="@color/white"
+    android:background="@color/backgroundColor"
 
     android:fitsSystemWindows="true"
 
@@ -20,7 +20,6 @@
     app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
 
-
     <TextView
         android:id="@+id/toolbar_title"
         android:layout_width="wrap_content"
@@ -28,7 +27,7 @@
         android:layout_gravity="center"
         android:fontFamily="@font/unifrakturcook"
         android:text="The Penguins Club"
-        android:textColor="@color/black"
+        android:textColor="@color/textColor"
         android:textSize="25sp" />
 
 </androidx.appcompat.widget.Toolbar>

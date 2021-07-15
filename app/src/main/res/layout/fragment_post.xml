@@ -46,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/webview"
                 android:layout_margin="10dp"
-                android:textColor="@color/black"
+                android:textColor="@color/textColor"
                 android:textSize="25sp"
                 android:visibility="gone" />
 

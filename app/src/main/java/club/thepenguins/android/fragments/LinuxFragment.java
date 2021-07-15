@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
+
 import org.jsoup.parser.Parser;
 
 import java.util.ArrayList;
@@ -44,6 +46,8 @@ public class LinuxFragment extends Fragment {
     private PostRecyclerAdapter adapter;
     public static List<Posts> mListPost;
     private SwipeRefreshLayout swipeContainer;
+    private ShimmerFrameLayout loader;
+
 
     public LinuxFragment() {
         // Required empty public constructor
@@ -76,6 +80,8 @@ public class LinuxFragment extends Fragment {
 
 
         recyclerView = rootView.findViewById(R.id.recycler_view);
+        loader = (ShimmerFrameLayout) rootView.findViewById(R.id.shimmer_view_container);
+
 
         LayoutManager = new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(LayoutManager);
@@ -118,6 +124,8 @@ public class LinuxFragment extends Fragment {
     private void getRetrofit() {
 
         swipeContainer.setRefreshing(true);
+        loader.setVisibility(View.VISIBLE);
+        loader.startShimmer();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Constants.BaseUrl)
@@ -140,6 +148,7 @@ public class LinuxFragment extends Fragment {
                 }
                 adapter.notifyDataSetChanged();
                 swipeContainer.setRefreshing(false);
+                loader.setVisibility(View.GONE);
 
             }
 

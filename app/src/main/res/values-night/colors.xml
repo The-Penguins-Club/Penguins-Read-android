@@ -2,13 +2,12 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="daynight_textcolor">#0044cc</color>
-    <color name="switchColor">#911DEE</color>
+    <color name="colorAccent">#F77000</color>
+    <color name="daynight_textcolor">#FF8222</color>
+    <color name="switchColor">#F77000</color>
+    <color name="backgroundColor">#000000</color>
+    <color name="textColor">#FFFFFF</color>
     <color name="shimmer_placeholder">#dddddd</color>
-    <color name="backgroundColor">#FCFCFC</color>
-    <color name="textColor">#000000</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-
 </resources>

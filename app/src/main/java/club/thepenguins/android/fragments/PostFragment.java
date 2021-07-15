@@ -1,17 +1,21 @@
 package club.thepenguins.android.fragments;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.webkit.WebSettingsCompat;
+import androidx.webkit.WebViewFeature;
 
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -151,6 +155,14 @@ public class PostFragment extends Fragment {
 
                     myWebView.loadDataWithBaseURL(null, newHtmlString, "text/html", "UTF-8", null);
                     myWebView.getSettings().setJavaScriptEnabled(true);
+
+                    int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+                    if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
+
+                        if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
+                            WebSettingsCompat.setForceDark(myWebView.getSettings(), WebSettingsCompat.FORCE_DARK_ON);
+                        }
+                    }
                     loader.setVisibility(View.GONE);
                     textView.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.VISIBLE);

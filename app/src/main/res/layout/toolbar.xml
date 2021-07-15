@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:fontFamily="@font/unifrakturcook"
-        android:text="The Penguins Club"
+        android:text="@string/name"
         android:textColor="@color/textColor"
         android:textSize="25sp" />
 

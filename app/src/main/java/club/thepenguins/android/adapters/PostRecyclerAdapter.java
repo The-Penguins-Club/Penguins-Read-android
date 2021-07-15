@@ -1,6 +1,7 @@
 package club.thepenguins.android.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,9 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Callback;
@@ -21,8 +20,8 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import club.thepenguins.android.R;
+import club.thepenguins.android.activities.PostActivity;
 import club.thepenguins.android.data.Model;
-import club.thepenguins.android.fragments.PostFragment;
 
 public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapter.ViewHolder> {
 
@@ -91,10 +90,21 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
             @Override
             public void onClick(View v) {
 
+                Intent intent = new Intent(ctx, PostActivity.class);
+                intent.putExtra("content", object.Content);
+                intent.putExtra("author", object.author);
+                intent.putExtra("image", object.Image);
+                intent.putExtra("title", object.title);
+                ctx.startActivity(intent);
+
+                /*
+
                 FragmentManager fragmentManager = ((AppCompatActivity) ctx).getSupportFragmentManager();
 
                 fragmentManager.beginTransaction().replace(R.id.flContent, PostFragment.newInstance(object.Content, object.Image, object.title, object.author)).addToBackStack(null).commit();
 
+
+                 */
             }
         });
 

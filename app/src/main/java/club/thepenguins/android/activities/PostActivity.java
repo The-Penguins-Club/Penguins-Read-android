@@ -1,25 +1,21 @@
-package club.thepenguins.android.fragments;
+package club.thepenguins.android.activities;
 
-import android.content.Context;
-import android.content.res.Configuration;
-import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.webkit.WebSettingsCompat;
 import androidx.webkit.WebViewFeature;
 
+import android.content.Context;
+import android.content.res.Configuration;
+import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 import com.facebook.shimmer.ShimmerFrameLayout;
 
@@ -47,17 +43,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static club.thepenguins.android.utils.Constants.noInternet;
 
+public class PostActivity extends AppCompatActivity {
 
-public class PostFragment extends Fragment {
-
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-    private static final String ARG_PARAM3 = "param3";
-    private static final String ARG_PARAM4 = "param4";
-    private String mParam1;
-    private String mParam2;
-    private String mParam3;
-    private String mParam4;
     private ArrayList<PostContent> postData;
     private ArrayList<CommentModel> comments;
     private RecyclerView recyclerView;
@@ -65,51 +52,38 @@ public class PostFragment extends Fragment {
     private LinearLayoutManager layoutManager;
     private TextView textView;
     private ShimmerFrameLayout loader;
+    private ImageView imageView;
 
-
-    public PostFragment() {
-        // Required empty public constructor
-    }
-
-
-    public static PostFragment newInstance(String param1, String param2, String param3, String param4) {
-        PostFragment fragment = new PostFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        args.putString(ARG_PARAM3, param3);
-        args.putString(ARG_PARAM4, param4);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-            mParam3 = getArguments().getString(ARG_PARAM3);
-            mParam4 = getArguments().getString(ARG_PARAM4);
-        }
-    }
+        setContentView(R.layout.activity_post);
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+        imageView = findViewById(R.id.back);
 
-        View rootView = inflater.inflate(R.layout.fragment_post, container, false);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-        loader = (ShimmerFrameLayout) rootView.findViewById(R.id.shimmer_view_container);
+                PostActivity.super.onBackPressed();
+            }
+        });
+
+        String content = getIntent().getStringExtra("content");
+        String title = getIntent().getStringExtra("title");
+        String author = getIntent().getStringExtra("author");
+        String image = getIntent().getStringExtra("image");
+
+        loader = (ShimmerFrameLayout) findViewById(R.id.shimmer_view_container);
 
         postData = new ArrayList<>();
         comments = new ArrayList<>();
 
         postData.clear();
 
-        getRetrofit(mParam1, rootView.getContext());
+        getRetrofit(content, PostActivity.this);
 
-        Log.d("TAG", "onCreateView: " + mParam1);
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -142,16 +116,16 @@ public class PostFragment extends Fragment {
 
                     char quotes = '"';
 
-                    String postTitle = "<h2>" + mParam3 + "</h2>" + "\n";
+                    String postTitle = "<h2>" + title + "</h2>" + "\n";
 
-                    String postAuthor = "<p>" + "Author: " + mParam4 + "</p>" + "\n";
+                    String postAuthor = "<p>" + "Author: " + author + "</p>" + "\n";
 
-                    String postImage = "<img src= " + quotes + mParam2 + quotes + " width =" + quotes + "100%" + quotes + "/>" + "\n";
+                    String postImage = "<img src= " + quotes + image + quotes + " width =" + quotes + "100%" + quotes + "/>" + "\n";
 
                     String newHtmlString = postImage + postTitle + postAuthor + htmlString;
 
 
-                    WebView myWebView = rootView.findViewById(R.id.webview);
+                    WebView myWebView = findViewById(R.id.webview);
 
                     myWebView.loadDataWithBaseURL(null, newHtmlString, "text/html", "UTF-8", null);
                     myWebView.getSettings().setJavaScriptEnabled(true);
@@ -168,7 +142,7 @@ public class PostFragment extends Fragment {
                     recyclerView.setVisibility(View.VISIBLE);
 
                 } catch (Exception e) {
-                    Toasty.error(rootView.getContext(), noInternet, Toast.LENGTH_LONG, true).show();
+                    Toasty.error(PostActivity.this, noInternet, Toast.LENGTH_LONG, true).show();
                     Log.d("PostFragment", "run: " + e);
                 }
 
@@ -176,27 +150,26 @@ public class PostFragment extends Fragment {
             }
         }, 3000);
 
-        textView = rootView.findViewById(R.id.txtview);
+        textView = findViewById(R.id.txtview);
 
-        recyclerView = rootView.findViewById(R.id.recyclerComment);
+        recyclerView = findViewById(R.id.recyclerComment);
 
-        layoutManager = new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false);
+        layoutManager = new LinearLayoutManager(PostActivity.this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
 
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                commentAdapter = new CommentAdapter(comments, rootView.getContext());
+                commentAdapter = new CommentAdapter(comments, PostActivity.this);
                 recyclerView.setAdapter(commentAdapter);
-                String intValue = mParam1.replaceAll("[^0-9]", "").substring(1);
+                String intValue = content.replaceAll("[^0-9]", "").substring(1);
 
                 getComments(intValue);
             }
         }, 5000);
 
 
-        return rootView;
     }
 
     private void getRetrofit(String postUrl, Context context) {
@@ -276,6 +249,5 @@ public class PostFragment extends Fragment {
         });
 
     }
-
 
 }

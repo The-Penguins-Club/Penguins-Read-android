@@ -1,5 +1,6 @@
 package club.thepenguins.android.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -12,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,10 +35,13 @@ import club.thepenguins.android.data.Comments;
 import club.thepenguins.android.data.IndividualPost;
 import club.thepenguins.android.data.PostContent;
 import club.thepenguins.android.utils.Constants;
+import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+import static club.thepenguins.android.utils.Constants.noInternet;
 
 
 public class PostFragment extends Fragment {
@@ -100,7 +103,7 @@ public class PostFragment extends Fragment {
 
         postData.clear();
 
-        getRetrofit(mParam1);
+        getRetrofit(mParam1, rootView.getContext());
 
         Log.d("TAG", "onCreateView: " + mParam1);
 
@@ -153,7 +156,7 @@ public class PostFragment extends Fragment {
                     recyclerView.setVisibility(View.VISIBLE);
 
                 } catch (Exception e) {
-                    Toast.makeText(rootView.getContext(), "Please retry", Toast.LENGTH_SHORT).show();
+                    Toasty.error(rootView.getContext(), noInternet, Toast.LENGTH_LONG, true).show();
                     Log.d("PostFragment", "run: " + e);
                 }
 
@@ -184,7 +187,7 @@ public class PostFragment extends Fragment {
         return rootView;
     }
 
-    private void getRetrofit(String postUrl) {
+    private void getRetrofit(String postUrl, Context context) {
 
         loader.startShimmer();
 
@@ -216,7 +219,7 @@ public class PostFragment extends Fragment {
             @Override
             public void onFailure(Call<IndividualPost> call, Throwable t) {
 
-                Log.d("PostRecyclerAdapter", "onFailure: ", t);
+                Toasty.error(context, noInternet, Toast.LENGTH_LONG, true).show();
             }
         });
     }

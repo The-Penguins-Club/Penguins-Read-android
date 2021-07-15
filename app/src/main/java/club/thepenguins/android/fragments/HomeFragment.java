@@ -1,5 +1,6 @@
 package club.thepenguins.android.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,10 +8,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
 import com.facebook.shimmer.ShimmerFrameLayout;
 
 import org.jsoup.parser.Parser;
@@ -24,11 +26,14 @@ import club.thepenguins.android.api.APIService;
 import club.thepenguins.android.data.Model;
 import club.thepenguins.android.data.Posts;
 import club.thepenguins.android.utils.Constants;
+import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+import static club.thepenguins.android.utils.Constants.noInternet;
 
 
 public class HomeFragment extends Fragment {
@@ -76,9 +81,6 @@ public class HomeFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
-        getActivity().setTitle("Choose Fragment");
-
-
         recyclerView = rootView.findViewById(R.id.recycler_view);
 
         LayoutManager = new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false);
@@ -91,7 +93,7 @@ public class HomeFragment extends Fragment {
 
         list = new ArrayList<>();
 
-        getRetrofit("100");
+        getRetrofit("100", rootView.getContext());
 
 
         adapter = new PostRecyclerAdapter(list, rootView.getContext());
@@ -106,7 +108,7 @@ public class HomeFragment extends Fragment {
             public void onRefresh() {
 
                 adapter.clear();
-                getRetrofit("100");
+                getRetrofit("100", rootView.getContext());
             }
 
         });
@@ -136,7 +138,7 @@ public class HomeFragment extends Fragment {
         super.onPause();
     }
 
-    private void getRetrofit(String perpage) {
+    private void getRetrofit(String perPage, Context context) {
 
         swipeContainer.setRefreshing(true);
         loader.setVisibility(View.VISIBLE);
@@ -148,7 +150,7 @@ public class HomeFragment extends Fragment {
                 .build();
 
         APIService service = retrofit.create(APIService.class);
-        Call<List<Posts>> call = service.getPostsPerPage(perpage);
+        Call<List<Posts>> call = service.getPostsPerPage(perPage);
 
 
         call.enqueue(new Callback<List<Posts>>() {
@@ -171,7 +173,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onFailure(Call<List<Posts>> call, Throwable t) {
 
-                Log.d("Home", "onFailure: ", t);
+                Toasty.error(context, noInternet, Toast.LENGTH_LONG, true).show();
             }
         });
     }

@@ -10,10 +10,12 @@ import androidx.fragment.app.FragmentManager;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 
 import club.thepenguins.android.R;
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     private NavigationView nvDrawer;
     private ActionBarDrawerToggle drawerToggle;
+    private static String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
         drawerToggle.syncState();
 
         mDrawer.addDrawerListener(drawerToggle);
+
+        FCM();
 
 
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -169,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
 
             default:
 
-                 fragmentClass = HomeFragment.class;
+                fragmentClass = HomeFragment.class;
 
         }
 
@@ -193,6 +198,19 @@ public class MainActivity extends AppCompatActivity {
 
         setTitle(menuItem.getTitle());
         mDrawer.closeDrawers();
+
+    }
+
+    private void FCM() {
+
+        FirebaseMessaging.getInstance().subscribeToTopic("NewPost").addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Log.d(TAG, "Successfully Subscribed to Notification Service");
+
+            } else {
+                Log.d(TAG, "Subscription to Notification Service failed");
+            }
+        });
 
     }
 

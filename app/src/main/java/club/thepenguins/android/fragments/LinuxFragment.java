@@ -80,7 +80,7 @@ public class LinuxFragment extends Fragment {
 
 
         recyclerView = rootView.findViewById(R.id.recycler_view);
-        loader = (ShimmerFrameLayout) rootView.findViewById(R.id.shimmer_view_container);
+        loader = rootView.findViewById(R.id.shimmer_view_container);
 
 
         LayoutManager = new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false);

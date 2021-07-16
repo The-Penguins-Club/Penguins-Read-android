@@ -3,7 +3,7 @@
     <!-- Base application theme. -->
     <style name="Theme.PenguinsRead" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">#ff00ff</item>
+        <item name="colorPrimary">@color/textColor</item>
         <item name="colorPrimaryVariant">@color/black</item>
         <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
@@ -11,6 +11,7 @@
         <item name="colorSecondaryVariant">@color/white</item>
         <item name="colorOnSecondary">@color/colorPrimary</item>
         <item name="drawerArrowStyle">@style/DrawerIconDay</item>
+        <item name="android:statusBarColor">@color/black</item>
         <!-- Customize your theme here. -->
     </style>
 </resources>

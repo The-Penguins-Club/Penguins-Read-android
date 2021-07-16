@@ -87,7 +87,7 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(LayoutManager);
 
 
-        loader = (ShimmerFrameLayout) rootView.findViewById(R.id.shimmer_view_container);
+        loader = rootView.findViewById(R.id.shimmer_view_container);
 
         swipeContainer = rootView.findViewById(R.id.swiperefresh);
 

@@ -10,8 +10,6 @@
         <item name="colorSecondary">@color/white</item>
         <item name="colorSecondaryVariant">@color/white</item>
         <item name="colorOnSecondary">@color/colorPrimary</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">@color/white</item>
         <item name="drawerArrowStyle">@style/DrawerIconNight</item>
         <!-- Customize your theme here. -->
     </style>

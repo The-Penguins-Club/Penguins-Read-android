@@ -48,11 +48,11 @@
                 <ImageView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="20dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
                     android:layout_weight="1"
-                    android:alpha="0.6"
-                    android:src="#00FFFFFF" />
+                    android:id="@+id/share"
+                    android:src="@drawable/ic_baseline_share_24" />
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>

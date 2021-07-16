@@ -95,6 +95,7 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
                 intent.putExtra("author", object.author);
                 intent.putExtra("image", object.Image);
                 intent.putExtra("title", object.title);
+                intent.putExtra("link", object.link);
                 ctx.startActivity(intent);
 
                 /*

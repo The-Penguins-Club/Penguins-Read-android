@@ -7,6 +7,7 @@ import androidx.webkit.WebSettingsCompat;
 import androidx.webkit.WebViewFeature;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
@@ -52,7 +53,7 @@ public class PostActivity extends AppCompatActivity {
     private LinearLayoutManager layoutManager;
     private TextView textView;
     private ShimmerFrameLayout loader;
-    private ImageView imageView;
+    private ImageView imageView, share;
 
 
     @Override
@@ -61,6 +62,7 @@ public class PostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_post);
 
         imageView = findViewById(R.id.back);
+        share = findViewById(R.id.share);
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,6 +76,7 @@ public class PostActivity extends AppCompatActivity {
         String title = getIntent().getStringExtra("title");
         String author = getIntent().getStringExtra("author");
         String image = getIntent().getStringExtra("image");
+        String link = getIntent().getStringExtra("link");
 
         loader = (ShimmerFrameLayout) findViewById(R.id.shimmer_view_container);
 
@@ -169,6 +172,13 @@ public class PostActivity extends AppCompatActivity {
             }
         }, 5000);
 
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sharePost(PostActivity.this, link);
+            }
+        });
+
 
     }
 
@@ -248,6 +258,14 @@ public class PostActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public static void sharePost(Context context, String uri) {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, uri);
+        sendIntent.setType("text/plain");
+        context.startActivity(sendIntent);
     }
 
 }

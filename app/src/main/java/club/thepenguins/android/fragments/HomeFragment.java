@@ -47,7 +47,7 @@ public class HomeFragment extends Fragment {
     private LinearLayoutManager LayoutManager;
     private ArrayList<Model> list;
     private PostRecyclerAdapter adapter;
-    public static List<Posts> mListPost;
+    public List<Posts> mListPost;
     private SwipeRefreshLayout swipeContainer;
     private ShimmerFrameLayout loader;
 

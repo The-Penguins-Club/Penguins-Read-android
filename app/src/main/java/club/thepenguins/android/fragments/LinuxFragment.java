@@ -1,5 +1,6 @@
 package club.thepenguins.android.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,6 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
 
@@ -25,11 +28,14 @@ import club.thepenguins.android.api.APIService;
 import club.thepenguins.android.data.Model;
 import club.thepenguins.android.data.Posts;
 import club.thepenguins.android.utils.Constants;
+import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+import static club.thepenguins.android.utils.Constants.noInternet;
 
 
 public class LinuxFragment extends Fragment {
@@ -47,6 +53,7 @@ public class LinuxFragment extends Fragment {
     public static List<Posts> mListPost;
     private SwipeRefreshLayout swipeContainer;
     private ShimmerFrameLayout loader;
+    private TextView textView;
 
 
     public LinuxFragment() {
@@ -82,6 +89,8 @@ public class LinuxFragment extends Fragment {
         recyclerView = rootView.findViewById(R.id.recycler_view);
         loader = rootView.findViewById(R.id.shimmer_view_container);
 
+        textView = rootView.findViewById(R.id.noPost);
+
 
         LayoutManager = new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(LayoutManager);
@@ -90,7 +99,7 @@ public class LinuxFragment extends Fragment {
 
         list = new ArrayList<>();
 
-        getRetrofit();
+        getRetrofit(rootView.getContext(), mParam1);
 
 
         adapter = new PostRecyclerAdapter(list, rootView.getContext());
@@ -104,7 +113,8 @@ public class LinuxFragment extends Fragment {
             public void onRefresh() {
 
                 adapter.clear();
-                getRetrofit();
+                getRetrofit(rootView.getContext(), mParam1);
+                textView.setVisibility(View.GONE);
             }
 
         });
@@ -121,7 +131,7 @@ public class LinuxFragment extends Fragment {
         return rootView;
     }
 
-    private void getRetrofit() {
+    private void getRetrofit(Context context, String id) {
 
         swipeContainer.setRefreshing(true);
         loader.setVisibility(View.VISIBLE);
@@ -133,7 +143,7 @@ public class LinuxFragment extends Fragment {
                 .build();
 
         APIService service = retrofit.create(APIService.class);
-        Call<List<Posts>> call = service.getCategoryPosts("4");
+        Call<List<Posts>> call = service.getCategoryPosts(id);
 
 
         call.enqueue(new Callback<List<Posts>>() {
@@ -150,12 +160,16 @@ public class LinuxFragment extends Fragment {
                 swipeContainer.setRefreshing(false);
                 loader.setVisibility(View.GONE);
 
+                if (list.size() == 0) {
+                    textView.setVisibility(View.VISIBLE);
+                }
+
             }
 
             @Override
             public void onFailure(Call<List<Posts>> call, Throwable t) {
 
-                Log.d("Linux", "onFailure: ", t);
+                Toasty.error(context, noInternet, Toast.LENGTH_LONG, true).show();
             }
         });
     }

@@ -5,25 +5,41 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import club.thepenguins.android.R;
 
+import club.thepenguins.android.api.APIService;
+import club.thepenguins.android.data.Category;
+import club.thepenguins.android.data.CategoryModel;
 import club.thepenguins.android.fragments.AboutFragment;
 import club.thepenguins.android.fragments.HomeFragment;
 import club.thepenguins.android.fragments.LinuxFragment;
-import club.thepenguins.android.fragments.NixFragment;
+import club.thepenguins.android.utils.Constants;
+import es.dmoral.toasty.Toasty;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+import static club.thepenguins.android.utils.Constants.noInternet;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,9 +47,11 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
 
-    private NavigationView nvDrawer;
+    private NavigationView nvView;
     private ActionBarDrawerToggle drawerToggle;
     private static String TAG = "MainActivity";
+    private List<Category> categories;
+    private ArrayList<CategoryModel> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         toolbar = findViewById(R.id.toolbar);
-
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
@@ -51,9 +68,9 @@ public class MainActivity extends AppCompatActivity {
 
         mDrawer = findViewById(R.id.drawer_layout);
 
-        nvDrawer = findViewById(R.id.nvView);
+        nvView = findViewById(R.id.nvView);
 
-        setupDrawerContent(nvDrawer);
+        setupDrawerContent(nvView);
 
 
         mDrawer = findViewById(R.id.drawer_layout);
@@ -65,6 +82,16 @@ public class MainActivity extends AppCompatActivity {
         drawerToggle.syncState();
 
         mDrawer.addDrawerListener(drawerToggle);
+
+
+        Menu menu = nvView.getMenu();
+
+        categories = new ArrayList<>();
+        list = new ArrayList<>();
+
+        getCategories(MainActivity.this, menu);
+
+        menu.add(0, 707, 5, "About Us");
 
         FCM();
 
@@ -114,6 +141,9 @@ public class MainActivity extends AppCompatActivity {
 
                 return true;
 
+            default:
+                mDrawer.openDrawer(GravityCompat.START);
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -143,60 +173,25 @@ public class MainActivity extends AppCompatActivity {
 
     public void selectDrawerItem(MenuItem menuItem) {
 
-        Fragment fragment = null;
-
-        Class fragmentClass = null;
-
-        switch (menuItem.getItemId()) {
-
-            case R.id.nav_first_fragment:
-
-                fragmentClass = HomeFragment.class;
-
-                break;
-
-            case R.id.aboutfrag:
-
-                fragmentClass = AboutFragment.class;
-
-                break;
-
-            case R.id.linuxfrag:
-
-                fragmentClass = LinuxFragment.class;
-
-                break;
-            case R.id.nixfrag:
-
-                fragmentClass = NixFragment.class;
-
-                break;
-
-            default:
-
-                fragmentClass = HomeFragment.class;
-
-        }
-
-
-        try {
-
-            fragment = (Fragment) fragmentClass.newInstance();
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-
-        }
-
 
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        if (menuItem.getItemId() == R.id.home) {
 
-        menuItem.setChecked(true);
+            fragmentManager.beginTransaction().replace(R.id.flContent, HomeFragment.newInstance("null", "null")).commit();
 
-        setTitle(menuItem.getTitle());
+        } else if (menuItem.getItemId() == 707) {
+
+            fragmentManager.beginTransaction().replace(R.id.flContent, AboutFragment.newInstance("null", "null")).commit();
+
+        } else {
+
+            fragmentManager.beginTransaction().replace(R.id.flContent, LinuxFragment.newInstance(String.valueOf(menuItem.getItemId()), null)).commit();
+
+        }
+
+        menuItem.setChecked(false);
+
         mDrawer.closeDrawers();
 
     }
@@ -209,6 +204,48 @@ public class MainActivity extends AppCompatActivity {
 
             } else {
                 Log.d(TAG, "Subscription to Notification Service failed");
+            }
+        });
+
+    }
+
+    private void getCategories(Context context, Menu menu1) {
+
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Constants.BaseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        APIService service = retrofit.create(APIService.class);
+        Call<List<Category>> call = service.getCategories();
+
+
+        call.enqueue(new Callback<List<Category>>() {
+            @Override
+            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
+
+                categories = response.body();
+                for (int i = 0; i < response.body().size(); i++) {
+
+                    list.add(new CategoryModel(response.body().get(i).getName(), response.body().get(i).getId()));
+                    System.out.println(response.body().get(i).getName());
+
+                }
+
+                Menu submenu = menu1.addSubMenu("Categories");
+                for (int i = 0; i < list.size(); i++) {
+                    submenu.add(i, list.get(i).getId(), i, list.get(i).getCatName());
+                    System.out.println(list.get(i));
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<List<Category>> call, Throwable t) {
+
+                Toasty.error(context, noInternet, Toast.LENGTH_SHORT, true).show();
             }
         });
 

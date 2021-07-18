@@ -2,6 +2,7 @@ package club.thepenguins.android.api;
 
 import java.util.List;
 
+import club.thepenguins.android.data.Category;
 import club.thepenguins.android.data.Comments;
 import club.thepenguins.android.data.Image;
 import club.thepenguins.android.data.IndividualPost;
@@ -33,6 +34,7 @@ public interface APIService {
     @GET("wp-json/wp/v2/comments")
     Call<List<Comments>> getPostComments(@Query("post") String id);
 
-    //@GET("wp-json/wp/v2/categories")
+    @GET("wp-json/wp/v2/categories")
+    Call<List<Category>> getCategories();
 
 }

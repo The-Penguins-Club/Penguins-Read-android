@@ -4,4 +4,5 @@
     <string name="drawer_close">Close navigation drawer</string>
     <string name="name">The Penguins Club</string>
     <string name="hello_blank_fragment">Hello</string>
+    <string name="noPosts">No posts in this category yet!</string>
 </resources>

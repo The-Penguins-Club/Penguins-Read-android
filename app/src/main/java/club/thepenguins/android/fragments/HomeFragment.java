@@ -27,6 +27,7 @@ import club.thepenguins.android.data.Model;
 import club.thepenguins.android.data.Posts;
 import club.thepenguins.android.utils.Constants;
 import es.dmoral.toasty.Toasty;
+import okhttp3.Headers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -100,6 +101,17 @@ public class HomeFragment extends Fragment {
         adapter.setStateRestorationPolicy(RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY);
         recyclerView.setAdapter(adapter);
 
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (!recyclerView.canScrollVertically(1) && dy > 0) {
+                    // End
+                } else if (!recyclerView.canScrollVertically(-1) && dy < 0) {
+                    // Top
+                }
+            }
+        });
+
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
@@ -158,6 +170,10 @@ public class HomeFragment extends Fragment {
             public void onResponse(Call<List<Posts>> call, Response<List<Posts>> response) {
 
                 mListPost = response.body();
+
+                Headers headers = response.headers();
+                String count = headers.get("X-WP-Total");
+
                 for (int i = 0; i < response.body().size(); i++) {
 
                     list.add(new Model(Parser.unescapeEntities(response.body().get(i).getTitle().getRendered(), false), response.body().get(i).getContent().getRendered(), response.body().get(i).getEmbedded().getWpFeaturedmedia().get(0).getSourceUrl(), response.body().get(i).getLinks().getSelf().get(0).getHref(), response.body().get(i).getEmbedded().getAuthor().get(0).getName(), response.body().get(i).getLink()));

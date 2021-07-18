@@ -33,4 +33,6 @@ public interface APIService {
     @GET("wp-json/wp/v2/comments")
     Call<List<Comments>> getPostComments(@Query("post") String id);
 
+    //@GET("wp-json/wp/v2/categories")
+
 }

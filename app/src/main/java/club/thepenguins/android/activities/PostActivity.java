@@ -54,6 +54,7 @@ public class PostActivity extends AppCompatActivity {
     private TextView textView;
     private ShimmerFrameLayout loader;
     private ImageView imageView, share;
+    private String title, author, image, link, content;
 
 
     @Override
@@ -72,11 +73,11 @@ public class PostActivity extends AppCompatActivity {
             }
         });
 
-        String content = getIntent().getStringExtra("content");
-        String title = getIntent().getStringExtra("title");
-        String author = getIntent().getStringExtra("author");
-        String image = getIntent().getStringExtra("image");
-        String link = getIntent().getStringExtra("link");
+        content = getIntent().getStringExtra("content");
+        title = getIntent().getStringExtra("title");
+        author = getIntent().getStringExtra("author");
+        image = getIntent().getStringExtra("image");
+        link = getIntent().getStringExtra("link");
 
         loader = (ShimmerFrameLayout) findViewById(R.id.shimmer_view_container);
 
@@ -87,11 +88,62 @@ public class PostActivity extends AppCompatActivity {
 
         getRetrofit(content, PostActivity.this);
 
-
         final Handler handler = new Handler();
+
+        textView = findViewById(R.id.txtview);
+
+        recyclerView = findViewById(R.id.recyclerComment);
+
+        layoutManager = new LinearLayoutManager(PostActivity.this, LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+
+
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                commentAdapter = new CommentAdapter(comments, PostActivity.this);
+                recyclerView.setAdapter(commentAdapter);
+                String intValue = content.replaceAll("[^0-9]", "").substring(1);
+
+                getComments(intValue);
+            }
+        }, 3000);
+
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sharePost(PostActivity.this, link);
+            }
+        });
+
+
+    }
+
+    private void getRetrofit(String postUrl, Context context) {
+
+        loader.startShimmer();
+
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(postUrl + "/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        APIService service = retrofit.create(APIService.class);
+        Call<IndividualPost> call = service.getPostContent();
+
+
+        call.enqueue(new retrofit2.Callback<IndividualPost>() {
+            @Override
+            public void onResponse(Call<IndividualPost> call, Response<IndividualPost> response) {
+
+
+                if (postData.size() > 1) {
+                    postData.clear();
+                }
+
+
+                postData.add(new PostContent(response.body().getContent().getRendered()));
 
                 try {
                     Document doc = Jsoup.parseBodyFragment(postData.get(0).getContent());
@@ -145,68 +197,9 @@ public class PostActivity extends AppCompatActivity {
                     recyclerView.setVisibility(View.VISIBLE);
 
                 } catch (Exception e) {
-                    Toasty.error(PostActivity.this, noInternet, Toast.LENGTH_LONG, true).show();
+                    Toasty.error(context, noInternet, Toast.LENGTH_LONG, true).show();
                     Log.d("PostFragment", "run: " + e);
                 }
-
-
-            }
-        }, 3000);
-
-        textView = findViewById(R.id.txtview);
-
-        recyclerView = findViewById(R.id.recyclerComment);
-
-        layoutManager = new LinearLayoutManager(PostActivity.this, LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(layoutManager);
-
-
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                commentAdapter = new CommentAdapter(comments, PostActivity.this);
-                recyclerView.setAdapter(commentAdapter);
-                String intValue = content.replaceAll("[^0-9]", "").substring(1);
-
-                getComments(intValue);
-            }
-        }, 5000);
-
-        share.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sharePost(PostActivity.this, link);
-            }
-        });
-
-
-    }
-
-    private void getRetrofit(String postUrl, Context context) {
-
-        loader.startShimmer();
-
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(postUrl + "/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        APIService service = retrofit.create(APIService.class);
-        Call<IndividualPost> call = service.getPostContent();
-
-
-        call.enqueue(new retrofit2.Callback<IndividualPost>() {
-            @Override
-            public void onResponse(Call<IndividualPost> call, Response<IndividualPost> response) {
-
-
-                if (postData.size() > 1) {
-                    postData.clear();
-                }
-
-
-                postData.add(new PostContent(response.body().getContent().getRendered()));
 
 
             }

@@ -7,8 +7,12 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import club.thepenguins.android.R;
+import es.dmoral.toasty.Toasty;
+
+import static club.thepenguins.android.utils.Constants.noImplemented;
 
 public class AboutFragment extends Fragment {
 
@@ -45,6 +49,10 @@ public class AboutFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_about, container, false);
+
+        View rootView = inflater.inflate(R.layout.fragment_about, container, false);
+
+        Toasty.info(rootView.getContext(), noImplemented, Toast.LENGTH_LONG).show();
+        return rootView;
     }
 }

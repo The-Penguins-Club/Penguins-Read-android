@@ -234,6 +234,7 @@ public class PostActivity extends AppCompatActivity {
 
                     System.out.println(response.body().get(i).getContent());
                 }
+
                 commentAdapter.notifyDataSetChanged();
                 if (comments.size() != 0) {
                     textView.setText("Comments:");

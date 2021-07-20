@@ -14,7 +14,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import club.thepenguins.android.R;
-import club.thepenguins.android.activities.MainActivity;
+import club.thepenguins.android.activities.SplashActivity;
 
 public class NotificationService extends FirebaseMessagingService {
 
@@ -46,10 +46,7 @@ public class NotificationService extends FirebaseMessagingService {
     public void showNotification(String title,
                                  String message) {
         Intent intent
-                = new Intent(this, MainActivity.class);
-        String channel_id = "notification_channel";
-
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                = new Intent(this, SplashActivity.class);
 
         PendingIntent pendingIntent
                 = PendingIntent.getActivity(
@@ -59,25 +56,12 @@ public class NotificationService extends FirebaseMessagingService {
 
         NotificationCompat.Builder builder
                 = new NotificationCompat
-                .Builder(getApplicationContext(),
-                channel_id)
+                .Builder(this,
+                "707")
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setVibrate(new long[]{1000, 1000, 1000,
-                        1000, 1000})
-                .setAutoCancel(true)
-                .setOnlyAlertOnce(true)
-                .setContentIntent(pendingIntent);
+                .setContentIntent(pendingIntent)
+                .setContent(getCustomDesign(title, message));
 
-
-        if (Build.VERSION.SDK_INT
-                >= Build.VERSION_CODES.JELLY_BEAN) {
-            builder = builder.setContent(
-                    getCustomDesign(title, message));
-        } else {
-            builder = builder.setContentTitle(title)
-                    .setContentText(message)
-                    .setSmallIcon(R.drawable.ic_launcher_background);
-        }
 
         NotificationManager notificationManager
                 = (NotificationManager) getSystemService(
@@ -86,7 +70,7 @@ public class NotificationService extends FirebaseMessagingService {
                 >= Build.VERSION_CODES.O) {
             NotificationChannel notificationChannel
                     = new NotificationChannel(
-                    channel_id, "web_app",
+                    "707", "New Posts",
                     NotificationManager.IMPORTANCE_HIGH);
             notificationManager.createNotificationChannel(
                     notificationChannel);

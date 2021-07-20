@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "741937680115",
+    "project_id": "penguins-club-6fd89",
+    "storage_bucket": "penguins-club-6fd89.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:741937680115:android:5517147e97fd1e7ee0f186",
+        "android_client_info": {
+          "package_name": "club.thepenguins.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "741937680115-6a1c0luphb7lracmm3m358eb4kgogpsn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfwu9I5YzsLqo2U_SxZ1VUrfvk5bkDtJI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "741937680115-6a1c0luphb7lracmm3m358eb4kgogpsn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

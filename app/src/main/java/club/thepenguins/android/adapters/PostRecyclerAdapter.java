@@ -75,16 +75,6 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
                     }
                 });
 
-        /*
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-            }
-        }, 1000);
-         */
-
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,14 +88,6 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
                 intent.putExtra("link", object.link);
                 ctx.startActivity(intent);
 
-                /*
-
-                FragmentManager fragmentManager = ((AppCompatActivity) ctx).getSupportFragmentManager();
-
-                fragmentManager.beginTransaction().replace(R.id.flContent, PostFragment.newInstance(object.Content, object.Image, object.title, object.author)).addToBackStack(null).commit();
-
-
-                 */
             }
         });
 
@@ -122,9 +104,11 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
 
     public void addAll(ArrayList<Model> list) {
 
+        int lastIndex = list.size() - 1;
+
         list.addAll(list);
 
-        notifyDataSetChanged();
+        notifyItemRangeInserted(lastIndex, list.size());
 
     }
 
@@ -144,7 +128,6 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
             super(itemView);
 
             cardView = itemView.findViewById(R.id.card);
-
             title = itemView.findViewById(R.id.title);
             subtitle = itemView.findViewById(R.id.subtitle);
             imageView = itemView.findViewById(R.id.Icon);

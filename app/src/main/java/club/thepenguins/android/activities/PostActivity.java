@@ -79,7 +79,7 @@ public class PostActivity extends AppCompatActivity {
         image = getIntent().getStringExtra("image");
         link = getIntent().getStringExtra("link");
 
-        loader = (ShimmerFrameLayout) findViewById(R.id.shimmer_view_container);
+        loader = findViewById(R.id.shimmer_view_container);
 
         postData = new ArrayList<>();
         comments = new ArrayList<>();
@@ -221,7 +221,8 @@ public class PostActivity extends AppCompatActivity {
                 .build();
 
         APIService service = retrofit.create(APIService.class);
-        Call<List<Comments>> call = service.getPostComments(id);
+        Call<List<Comments>> call = service.getPostComments(id, "parent", "asc", "50");
+        System.out.println(id);
 
 
         call.enqueue(new retrofit2.Callback<List<Comments>>() {
@@ -230,7 +231,10 @@ public class PostActivity extends AppCompatActivity {
 
                 for (int i = 0; i < response.body().size(); i++) {
 
-                    comments.add(new CommentModel(response.body().get(i).getAuthorAvatarUrls().get96(), response.body().get(i).getAuthorName(), response.body().get(i).getDate(), response.body().get(i).getContent().getRendered()));
+                    comments.add(new CommentModel(response.body().get(i).getAuthorAvatarUrls().get96(),
+                            response.body().get(i).getAuthorName(),
+                            response.body().get(i).getDate(),
+                            response.body().get(i).getContent().getRendered()));
 
                     System.out.println(response.body().get(i).getContent());
                 }

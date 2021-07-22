@@ -28,7 +28,10 @@ public interface APIService {
     Call<List<Posts>> getAuthorPosts(@Query("author") String id);
 
     @GET("wp-json/wp/v2/comments")
-    Call<List<Comments>> getPostComments(@Query("post") String id);
+    Call<List<Comments>> getPostComments(@Query("post") String id,
+                                         @Query("orderby") String orderby,
+                                         @Query("order") String order,
+                                         @Query("per_page") String perPage);
 
     @GET("wp-json/wp/v2/categories")
     Call<List<Category>> getCategories();

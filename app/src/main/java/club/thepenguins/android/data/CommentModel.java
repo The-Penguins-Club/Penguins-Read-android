@@ -2,7 +2,16 @@ package club.thepenguins.android.data;
 
 public class CommentModel {
 
-    private String image, author, time, content;
+    private String image, author, time, content, parent, child;
+
+    public CommentModel(String image, String author, String time, String content, String parent, String child) {
+        this.image = image;
+        this.author = author;
+        this.time = time;
+        this.content = content;
+        this.parent = parent;
+        this.child = child;
+    }
 
     public CommentModel(String image, String author, String time, String content) {
 
@@ -48,5 +57,21 @@ public class CommentModel {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getParent() {
+        return parent;
+    }
+
+    public void setParent(String parent) {
+        this.parent = parent;
+    }
+
+    public String getChild() {
+        return child;
+    }
+
+    public void setChild(String child) {
+        this.child = child;
     }
 }

@@ -35,6 +35,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static club.thepenguins.android.utils.Constants.noInternet;
+import static club.thepenguins.android.utils.Constants.noMorePosts;
 
 
 public class HomeFragment extends Fragment {
@@ -51,6 +52,9 @@ public class HomeFragment extends Fragment {
     public List<Posts> mListPost;
     private SwipeRefreshLayout swipeContainer;
     private ShimmerFrameLayout loader;
+    public int pageNumber = 1;
+    public int limit;
+    private static String TAG = "Home";
 
 
     public static HomeFragment newInstance(String param1, String param2) {
@@ -87,15 +91,13 @@ public class HomeFragment extends Fragment {
         LayoutManager = new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(LayoutManager);
 
-
         loader = rootView.findViewById(R.id.shimmer_view_container);
 
         swipeContainer = rootView.findViewById(R.id.swiperefresh);
 
         list = new ArrayList<>();
 
-        getRetrofit("100", rootView.getContext());
-
+        getRetrofit(pageNumber, 10, rootView.getContext());
 
         adapter = new PostRecyclerAdapter(list, rootView.getContext());
         adapter.setStateRestorationPolicy(RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY);
@@ -104,8 +106,22 @@ public class HomeFragment extends Fragment {
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if (!recyclerView.canScrollVertically(1) && dy > 0) {
-                    // End
+                if (!recyclerView.canScrollVertically(1) && (dy > 0)) {
+                    if (!(String.valueOf(limit).isEmpty())) {
+
+                        getRetrofit(pageNumber, 10, rootView.getContext());
+
+                        recyclerView.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                adapter.notifyItemInserted(adapter.getItemCount() + 10);
+                            }
+                        });
+
+
+                    }
+
+
                 } else if (!recyclerView.canScrollVertically(-1) && dy < 0) {
                     // Top
                 }
@@ -119,8 +135,9 @@ public class HomeFragment extends Fragment {
 
             public void onRefresh() {
 
+                pageNumber = 1;
                 adapter.clear();
-                getRetrofit("100", rootView.getContext());
+                getRetrofit(pageNumber, 10, rootView.getContext());
             }
 
         });
@@ -150,7 +167,7 @@ public class HomeFragment extends Fragment {
         super.onPause();
     }
 
-    private void getRetrofit(String perPage, Context context) {
+    private void getRetrofit(int page, int perPage, Context context) {
 
         swipeContainer.setRefreshing(true);
         loader.setVisibility(View.VISIBLE);
@@ -162,7 +179,7 @@ public class HomeFragment extends Fragment {
                 .build();
 
         APIService service = retrofit.create(APIService.class);
-        Call<List<Posts>> call = service.getPostsPerPage(perPage);
+        Call<List<Posts>> call = service.getPostsPerPage(page, perPage);
 
 
         call.enqueue(new Callback<List<Posts>>() {
@@ -174,15 +191,31 @@ public class HomeFragment extends Fragment {
                 Headers headers = response.headers();
                 String count = headers.get("X-WP-Total");
 
-                for (int i = 0; i < response.body().size(); i++) {
-
-                    list.add(new Model(Parser.unescapeEntities(response.body().get(i).getTitle().getRendered(), false), response.body().get(i).getContent().getRendered(), response.body().get(i).getEmbedded().getWpFeaturedmedia().get(0).getSourceUrl(), response.body().get(i).getLinks().getSelf().get(0).getHref(), response.body().get(i).getEmbedded().getAuthor().get(0).getName(), response.body().get(i).getLink()));
-
+                if (count != null) {
+                    limit = Integer.parseInt(count);
+                } else {
+                    swipeContainer.setRefreshing(false);
+                    loader.setVisibility(View.GONE);
+                    Toasty.info(context, noMorePosts).show();
                 }
-                adapter.notifyDataSetChanged();
-                swipeContainer.setRefreshing(false);
-                loader.setVisibility(View.GONE);
-                recyclerView.setVisibility(View.VISIBLE);
+
+                if (response.body() != null) {
+                    for (int i = 0; i < response.body().size(); i++) {
+
+                        list.add(new Model(Parser.unescapeEntities(response.body().get(i).getTitle().getRendered(), false),
+                                response.body().get(i).getContent().getRendered(), response.body().get(i).getEmbedded().getWpFeaturedmedia().get(0).getSourceUrl(),
+                                response.body().get(i).getLinks().getSelf().get(0).getHref(),
+                                response.body().get(i).getEmbedded().getAuthor().get(0).getName(),
+                                response.body().get(i).getLink()));
+
+                    }
+                    adapter.notifyDataSetChanged();
+                    swipeContainer.setRefreshing(false);
+                    loader.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                    pageNumber = pageNumber + 1;
+                }
+
 
             }
 

@@ -23,6 +23,7 @@
                 android:layout_gravity="center"
                 android:fontFamily="@font/unifrakturcook"
                 android:text="@string/logo"
+                android:id="@+id/bigP"
                 android:textColor="@color/textColor"
                 android:textSize="80sp" />
 

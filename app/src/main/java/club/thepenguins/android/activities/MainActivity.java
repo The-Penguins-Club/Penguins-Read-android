@@ -229,14 +229,12 @@ public class MainActivity extends AppCompatActivity {
                 for (int i = 0; i < response.body().size(); i++) {
 
                     list.add(new CategoryModel(response.body().get(i).getName(), response.body().get(i).getId()));
-                    System.out.println(response.body().get(i).getName());
 
                 }
 
                 Menu submenu = menu1.addSubMenu("Categories");
                 for (int i = 0; i < list.size(); i++) {
                     submenu.add(i, list.get(i).getId(), i, list.get(i).getCatName());
-                    System.out.println(list.get(i));
                 }
 
 

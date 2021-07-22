@@ -16,7 +16,7 @@ public interface APIService {
     Call<List<Posts>> getPosts();
 
     @GET("wp-json/wp/v2/posts?_embed")
-    Call<List<Posts>> getPostsPerPage(@Query("per_page") String count);
+    Call<List<Posts>> getPostsPerPage(@Query("page") int Page, @Query("per_page") int count);
 
     @GET("wp-json/wp/v2/posts?_embed")
     Call<List<Posts>> getCategoryPosts(@Query("categories") String id);

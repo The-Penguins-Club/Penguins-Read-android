@@ -21,6 +21,8 @@ import java.util.Arrays;
 import club.thepenguins.android.R;
 import club.thepenguins.android.adapters.ThanksAdapter;
 
+import static club.thepenguins.android.utils.Constants.BaseUrl;
+
 public class AboutFragment extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
@@ -31,7 +33,7 @@ public class AboutFragment extends Fragment {
     private LinearLayoutManager LayoutManager;
     private ThanksAdapter adapter;
     private ArrayList<String> list;
-    private TextView textView1, textView2, textView3;
+    private TextView textView1, textView2, textView3, textView4;
     private ImageView imageView;
 
     public AboutFragment() {
@@ -69,6 +71,7 @@ public class AboutFragment extends Fragment {
         textView1 = rootView.findViewById(R.id.dev);
         textView2 = rootView.findViewById(R.id.bn);
         textView3 = rootView.findViewById(R.id.international);
+        textView4 = rootView.findViewById(R.id.bigP);
         imageView = rootView.findViewById(R.id.git);
 
 
@@ -97,6 +100,13 @@ public class AboutFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 linkOpener(rootView.getContext(), rootView.getContext().getResources().getString(R.string.inter));
+            }
+        });
+
+        textView4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                linkOpener(rootView.getContext(), BaseUrl);
             }
         });
 

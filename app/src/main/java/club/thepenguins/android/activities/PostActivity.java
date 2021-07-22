@@ -236,7 +236,6 @@ public class PostActivity extends AppCompatActivity {
                             response.body().get(i).getDate(),
                             response.body().get(i).getContent().getRendered()));
 
-                    System.out.println(response.body().get(i).getContent());
                 }
 
                 commentAdapter.notifyDataSetChanged();
@@ -258,7 +257,7 @@ public class PostActivity extends AppCompatActivity {
 
     }
 
-    public static void sharePost(Context context, String uri) {
+    public void sharePost(Context context, String uri) {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_TEXT, uri);

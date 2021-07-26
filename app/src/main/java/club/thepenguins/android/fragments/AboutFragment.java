@@ -75,40 +75,15 @@ public class AboutFragment extends Fragment {
         imageView = rootView.findViewById(R.id.git);
 
 
-        textView1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                linkOpener(rootView.getContext(), rootView.getContext().getResources().getString(R.string.github));
-            }
-        });
+        textView1.setOnClickListener(v -> linkOpener(rootView.getContext(), rootView.getContext().getResources().getString(R.string.github)));
 
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                linkOpener(rootView.getContext(), rootView.getContext().getResources().getString(R.string.github));
-            }
-        });
+        imageView.setOnClickListener(v -> linkOpener(rootView.getContext(), rootView.getContext().getResources().getString(R.string.github)));
 
-        textView2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                linkOpener(rootView.getContext(), rootView.getContext().getResources().getString(R.string.penguins));
-            }
-        });
+        textView2.setOnClickListener(v -> linkOpener(rootView.getContext(), rootView.getContext().getResources().getString(R.string.penguins)));
 
-        textView3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                linkOpener(rootView.getContext(), rootView.getContext().getResources().getString(R.string.inter));
-            }
-        });
+        textView3.setOnClickListener(v -> linkOpener(rootView.getContext(), rootView.getContext().getResources().getString(R.string.inter)));
 
-        textView4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                linkOpener(rootView.getContext(), BaseUrl);
-            }
-        });
+        textView4.setOnClickListener(v -> linkOpener(rootView.getContext(), BaseUrl));
 
 
         LayoutManager = new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false);

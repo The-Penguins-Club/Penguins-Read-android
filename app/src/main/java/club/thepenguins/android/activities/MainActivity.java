@@ -95,7 +95,6 @@ public class MainActivity extends AppCompatActivity {
 
         FCM();
 
-
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         fragmentManager.beginTransaction().replace(R.id.flContent, HomeFragment.newInstance("null", "null")).commit();
@@ -154,17 +153,11 @@ public class MainActivity extends AppCompatActivity {
 
         navigationView.setNavigationItemSelectedListener(
 
-                new NavigationView.OnNavigationItemSelectedListener() {
+                menuItem -> {
 
-                    @Override
+                    selectDrawerItem(menuItem);
 
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
-
-                        selectDrawerItem(menuItem);
-
-                        return true;
-
-                    }
+                    return true;
 
                 });
 

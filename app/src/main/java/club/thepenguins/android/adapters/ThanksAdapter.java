@@ -45,12 +45,7 @@ public class ThanksAdapter extends RecyclerView.Adapter<ThanksAdapter.ViewHolder
         final String object = data.get(position);
 
         holder.name.setText(object);
-        holder.name.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toasty.success(ctx, object, Toast.LENGTH_SHORT, false).show();
-            }
-        });
+        holder.name.setOnClickListener(v -> Toasty.success(ctx, object, Toast.LENGTH_SHORT, false).show());
 
     }
 

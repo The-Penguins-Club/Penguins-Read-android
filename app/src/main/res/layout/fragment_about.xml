@@ -17,15 +17,28 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="@font/unifrakturcook"
-                android:text="@string/logo"
-                android:id="@+id/bigP"
-                android:textColor="@color/textColor"
-                android:textSize="80sp" />
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/shimmer_view_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/bigP"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/unifrakturcook"
+                        android:text="@string/logo"
+                        android:textColor="@color/textColor"
+                        android:textSize="80sp" />
+                </LinearLayout>
+            </com.facebook.shimmer.ShimmerFrameLayout>
 
             <TextView
                 android:layout_width="match_parent"
@@ -157,6 +170,20 @@
                     android:layout_height="wrap_content" />
 
 
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="@color/textColor"
+                    android:text="@string/copyright" />
             </LinearLayout>
 
 

@@ -102,17 +102,11 @@ public class LinuxFragment extends Fragment {
 
         recyclerView.setAdapter(adapter);
 
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swipeContainer.setOnRefreshListener(() -> {
 
-            @Override
-
-            public void onRefresh() {
-
-                adapter.clear();
-                getRetrofit(rootView.getContext(), mParam1);
-                textView.setVisibility(View.GONE);
-            }
-
+            adapter.clear();
+            getRetrofit(rootView.getContext(), mParam1);
+            textView.setVisibility(View.GONE);
         });
 
 

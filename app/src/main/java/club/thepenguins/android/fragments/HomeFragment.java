@@ -52,8 +52,9 @@ public class HomeFragment extends Fragment {
     public List<Posts> mListPost;
     private SwipeRefreshLayout swipeContainer;
     private ShimmerFrameLayout loader;
-    public int pageNumber = 1;
-    public int limit;
+    int pageNumber = 1;
+    int limit;
+    int perPage = 10;
     private static String TAG = "Home";
 
 
@@ -97,7 +98,7 @@ public class HomeFragment extends Fragment {
 
         list = new ArrayList<>();
 
-        getRetrofit(pageNumber, 10, rootView.getContext());
+        getRetrofit(pageNumber, perPage, rootView.getContext());
 
         adapter = new PostRecyclerAdapter(list, rootView.getContext());
         adapter.setStateRestorationPolicy(RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY);
@@ -109,14 +110,9 @@ public class HomeFragment extends Fragment {
                 if (!recyclerView.canScrollVertically(1) && (dy > 0)) {
                     if (!(String.valueOf(limit).isEmpty())) {
 
-                        getRetrofit(pageNumber, 10, rootView.getContext());
+                        getRetrofit(pageNumber, perPage, rootView.getContext());
 
-                        recyclerView.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                adapter.notifyItemInserted(adapter.getItemCount() + 10);
-                            }
-                        });
+                        recyclerView.post(() -> adapter.notifyItemInserted(adapter.getItemCount() + perPage));
 
 
                     }
@@ -129,17 +125,11 @@ public class HomeFragment extends Fragment {
         });
 
 
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swipeContainer.setOnRefreshListener(() -> {
 
-            @Override
-
-            public void onRefresh() {
-
-                pageNumber = 1;
-                adapter.clear();
-                getRetrofit(pageNumber, 10, rootView.getContext());
-            }
-
+            pageNumber = 1;
+            adapter.clear();
+            getRetrofit(pageNumber, perPage, rootView.getContext());
         });
 
 

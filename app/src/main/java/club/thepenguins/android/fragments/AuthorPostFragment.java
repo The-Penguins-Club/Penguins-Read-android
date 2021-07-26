@@ -91,16 +91,10 @@ public class AuthorPostFragment extends Fragment {
 
         recyclerView.setAdapter(adapter);
 
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swipeContainer.setOnRefreshListener(() -> {
 
-            @Override
-
-            public void onRefresh() {
-
-                adapter.clear();
-                getRetrofit(mParam1);
-            }
-
+            adapter.clear();
+            getRetrofit(mParam1);
         });
 
 

@@ -76,19 +76,16 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
                 });
 
 
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        holder.cardView.setOnClickListener(v -> {
 
-                Intent intent = new Intent(ctx, PostActivity.class);
-                intent.putExtra("content", object.Content);
-                intent.putExtra("author", object.author);
-                intent.putExtra("image", object.Image);
-                intent.putExtra("title", object.title);
-                intent.putExtra("link", object.link);
-                ctx.startActivity(intent);
+            Intent intent = new Intent(ctx, PostActivity.class);
+            intent.putExtra("content", object.Content);
+            intent.putExtra("author", object.author);
+            intent.putExtra("image", object.Image);
+            intent.putExtra("title", object.title);
+            intent.putExtra("link", object.link);
+            ctx.startActivity(intent);
 
-            }
         });
 
 

@@ -55,6 +55,7 @@ public class PostActivity extends AppCompatActivity {
     private ShimmerFrameLayout loader;
     private ImageView imageView, share;
     private String title, author, image, link, content;
+    private View view;
 
 
     @Override
@@ -65,19 +66,15 @@ public class PostActivity extends AppCompatActivity {
         imageView = findViewById(R.id.back);
         share = findViewById(R.id.share);
 
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                PostActivity.super.onBackPressed();
-            }
-        });
+        imageView.setOnClickListener(v -> PostActivity.super.onBackPressed());
 
         content = getIntent().getStringExtra("content");
         title = getIntent().getStringExtra("title");
         author = getIntent().getStringExtra("author");
         image = getIntent().getStringExtra("image");
         link = getIntent().getStringExtra("link");
+
+        view = findViewById(R.id.line);
 
         loader = findViewById(R.id.shimmer_view_container);
 
@@ -98,23 +95,15 @@ public class PostActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
 
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                commentAdapter = new CommentAdapter(comments, PostActivity.this);
-                recyclerView.setAdapter(commentAdapter);
-                String intValue = content.replaceAll("[^0-9]", "").substring(1);
+        handler.postDelayed(() -> {
+            commentAdapter = new CommentAdapter(comments, PostActivity.this);
+            recyclerView.setAdapter(commentAdapter);
+            String intValue = content.replaceAll("[^0-9]", "").substring(1);
 
-                getComments(intValue);
-            }
+            getComments(intValue);
         }, 3000);
 
-        share.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sharePost(PostActivity.this, link);
-            }
-        });
+        share.setOnClickListener(v -> sharePost(PostActivity.this, link));
 
 
     }
@@ -192,6 +181,7 @@ public class PostActivity extends AppCompatActivity {
                             WebSettingsCompat.setForceDark(myWebView.getSettings(), WebSettingsCompat.FORCE_DARK_ON);
                         }
                     }
+
                     loader.setVisibility(View.GONE);
                     textView.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.VISIBLE);

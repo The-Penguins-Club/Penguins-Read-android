@@ -5,7 +5,7 @@
     <color name="colorAccent">#F77000</color>
     <color name="daynight_textcolor">#FF8222</color>
     <color name="switchColor">#F77000</color>
-    <color name="backgroundColor">#000000</color>
+    <color name="backgroundColor">#222222</color>
     <color name="textColor">#FFFFFF</color>
     <color name="shimmer_placeholder">#dddddd</color>
     <color name="black">#FF000000</color>

@@ -144,7 +144,7 @@ public class PostActivity extends AppCompatActivity {
                     for (Element image : images) {
 
                         image.attr("width", "100%");
-                        image.attr("height", "240px");
+                        image.attr("height", "auto");
 
                     }
 

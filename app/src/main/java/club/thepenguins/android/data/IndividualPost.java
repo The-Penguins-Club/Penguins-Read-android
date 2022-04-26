@@ -70,16 +70,28 @@ public class IndividualPost {
     private String format;
     @SerializedName("meta")
     @Expose
-    private List<Object> meta = null;
+    private Meta meta;
     @SerializedName("categories")
     @Expose
     private List<Integer> categories = null;
     @SerializedName("tags")
     @Expose
     private List<Integer> tags = null;
-    @SerializedName("yoast_head")
+    @SerializedName("acf")
     @Expose
-    private String yoastHead;
+    private List<Object> acf = null;
+    @SerializedName("jetpack_featured_media_url")
+    @Expose
+    private String jetpackFeaturedMediaUrl;
+    @SerializedName("jetpack_publicize_connections")
+    @Expose
+    private List<Object> jetpackPublicizeConnections = null;
+    @SerializedName("jetpack_sharing_enabled")
+    @Expose
+    private Boolean jetpackSharingEnabled;
+    @SerializedName("jetpack_likes_enabled")
+    @Expose
+    private Boolean jetpackLikesEnabled;
     @SerializedName("_links")
     @Expose
     private Links links;
@@ -244,11 +256,11 @@ public class IndividualPost {
         this.format = format;
     }
 
-    public List<Object> getMeta() {
+    public Meta getMeta() {
         return meta;
     }
 
-    public void setMeta(List<Object> meta) {
+    public void setMeta(Meta meta) {
         this.meta = meta;
     }
 
@@ -268,12 +280,44 @@ public class IndividualPost {
         this.tags = tags;
     }
 
-    public String getYoastHead() {
-        return yoastHead;
+    public List<Object> getAcf() {
+        return acf;
     }
 
-    public void setYoastHead(String yoastHead) {
-        this.yoastHead = yoastHead;
+    public void setAcf(List<Object> acf) {
+        this.acf = acf;
+    }
+
+    public String getJetpackFeaturedMediaUrl() {
+        return jetpackFeaturedMediaUrl;
+    }
+
+    public void setJetpackFeaturedMediaUrl(String jetpackFeaturedMediaUrl) {
+        this.jetpackFeaturedMediaUrl = jetpackFeaturedMediaUrl;
+    }
+
+    public List<Object> getJetpackPublicizeConnections() {
+        return jetpackPublicizeConnections;
+    }
+
+    public void setJetpackPublicizeConnections(List<Object> jetpackPublicizeConnections) {
+        this.jetpackPublicizeConnections = jetpackPublicizeConnections;
+    }
+
+    public Boolean getJetpackSharingEnabled() {
+        return jetpackSharingEnabled;
+    }
+
+    public void setJetpackSharingEnabled(Boolean jetpackSharingEnabled) {
+        this.jetpackSharingEnabled = jetpackSharingEnabled;
+    }
+
+    public Boolean getJetpackLikesEnabled() {
+        return jetpackLikesEnabled;
+    }
+
+    public void setJetpackLikesEnabled(Boolean jetpackLikesEnabled) {
+        this.jetpackLikesEnabled = jetpackLikesEnabled;
     }
 
     public Links getLinks() {
@@ -283,7 +327,6 @@ public class IndividualPost {
     public void setLinks(Links links) {
         this.links = links;
     }
-
 
     public class About {
 
@@ -575,6 +618,55 @@ public class IndividualPost {
 
         public void setCuries(List<Cury> curies) {
             this.curies = curies;
+        }
+
+    }
+
+    public class Meta {
+
+        @SerializedName("spay_email")
+        @Expose
+        private String spayEmail;
+        @SerializedName("jetpack_publicize_message")
+        @Expose
+        private String jetpackPublicizeMessage;
+        @SerializedName("jetpack_is_tweetstorm")
+        @Expose
+        private Boolean jetpackIsTweetstorm;
+        @SerializedName("jetpack_publicize_feature_enabled")
+        @Expose
+        private Boolean jetpackPublicizeFeatureEnabled;
+
+        public String getSpayEmail() {
+            return spayEmail;
+        }
+
+        public void setSpayEmail(String spayEmail) {
+            this.spayEmail = spayEmail;
+        }
+
+        public String getJetpackPublicizeMessage() {
+            return jetpackPublicizeMessage;
+        }
+
+        public void setJetpackPublicizeMessage(String jetpackPublicizeMessage) {
+            this.jetpackPublicizeMessage = jetpackPublicizeMessage;
+        }
+
+        public Boolean getJetpackIsTweetstorm() {
+            return jetpackIsTweetstorm;
+        }
+
+        public void setJetpackIsTweetstorm(Boolean jetpackIsTweetstorm) {
+            this.jetpackIsTweetstorm = jetpackIsTweetstorm;
+        }
+
+        public Boolean getJetpackPublicizeFeatureEnabled() {
+            return jetpackPublicizeFeatureEnabled;
+        }
+
+        public void setJetpackPublicizeFeatureEnabled(Boolean jetpackPublicizeFeatureEnabled) {
+            this.jetpackPublicizeFeatureEnabled = jetpackPublicizeFeatureEnabled;
         }
 
     }
